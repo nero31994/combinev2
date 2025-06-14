@@ -1,38 +1,36 @@
 export default async function handler(req, res) {
-    const userAgent = (req.headers["user-agent"] || "").toLowerCase();
+    // --- Blocking Logic Removed for Open Access ---
 
-    // Only allow if user-agent contains 'm3u-ip.tv'
-    const isAllowed = userAgent.includes("m3u-ip.tv");
+    // const userAgent = (req.headers["user-agent"] || "").toLowerCase();
 
-    // Block known command-line tools or dev environments
-    const blockedAgents = [
-        "curl", "wget", "httpie", "postman", "http-client", "termux",
-        "okhttp", "python-requests", "axios", "node-fetch"
-    ];
-    const isBlockedTool = blockedAgents.some(agent =>
-        userAgent.includes(agent)
-    );
+    // const isAllowed = userAgent.includes("m3u-ip.tv");
 
-    // Check for suspicious headers used by dev tools
-    const suspiciousHeaders = [
-        "Postman-Token", "Insomnia", "Sec-Fetch-Mode", "Sec-Fetch-Site",
-        "Sec-Fetch-Dest", "X-Requested-With"
-    ];
-    const lowerHeaders = Object.keys(req.headers).map(h => h.toLowerCase());
-    const hasSuspiciousHeader = suspiciousHeaders
-        .map(h => h.toLowerCase())
-        .some(h => lowerHeaders.includes(h));
+    // const blockedAgents = [
+    //     "curl", "wget", "httpie", "postman", "http-client", "termux",
+    //     "okhttp", "python-requests", "axios", "node-fetch"
+    // ];
+    // const isBlockedTool = blockedAgents.some(agent =>
+    //     userAgent.includes(agent)
+    // );
 
-    if (!isAllowed || isBlockedTool || hasSuspiciousHeader) {
-        return res.status(403).json({ error: "Access denied. Unauthorized client." });
-    }
+    // const suspiciousHeaders = [
+    //     "Postman-Token", "Insomnia", "Sec-Fetch-Mode", "Sec-Fetch-Site",
+    //     "Sec-Fetch-Dest", "X-Requested-With"
+    // ];
+    // const lowerHeaders = Object.keys(req.headers).map(h => h.toLowerCase());
+    // const hasSuspiciousHeader = suspiciousHeaders
+    //     .map(h => h.toLowerCase())
+    //     .some(h => lowerHeaders.includes(h));
+
+    // if (!isAllowed || isBlockedTool || hasSuspiciousHeader) {
+    //     return res.status(403).json({ error: "Access denied. Unauthorized client." });
+    // }
 
     const urls = [
         "https://raw.githubusercontent.com/Drewski2423/DrewLive/refs/heads/main/DrewLiveVOD.m3u8",
         "https://raw.githubusercontent.com/Drewski2423/DrewLive/refs/heads/main/DaddyLive.m3u8",
         "https://raw.githubusercontent.com/Drewski2423/DrewLive/refs/heads/main/UDPTV.m3u",
-        "https://raw.githubusercontent.com/nero31994/pluto2/refs/heads/main/filtered_playlist.m3u",
-        
+        "https://raw.githubusercontent.com/nero31994/pluto2/refs/heads/main/filtered_playlist.m3u"
     ];
 
     const controller = new AbortController();
